@@ -47,7 +47,6 @@ export default {
       rafId: undefined,
       rafCount: 0,
       isPaused: false,
-      drawPaused: false,
     }
   },
 
@@ -153,8 +152,6 @@ export default {
     },
 
     tick() {
-      console.log('tick')
-
       this.rafId = requestAnimationFrame(this.tick)
       this.rafCount++
 
@@ -164,21 +161,16 @@ export default {
       }
 
       if (!this.active || this.isPaused) {
-        if (!this.drawPaused) {
-          this.drawPaused = true
-          this.context.clearRect(0, 0, this.width, this.height)
-          this.context.lineWidth = this.lineWidth
-          this.context.strokeStyle = this.lineColor
-          this.context.beginPath()
-          this.context.moveTo(0, this.height / 2)
-          this.context.lineTo(this.width, this.height / 2)
-          this.context.stroke()
-        }
+        this.context.clearRect(0, 0, this.width, this.height)
+        this.context.lineWidth = this.lineWidth
+        this.context.strokeStyle = this.lineColor
+        this.context.beginPath()
+        this.context.moveTo(0, this.height / 2)
+        this.context.lineTo(this.width, this.height / 2)
+        this.context.stroke()
 
         return
       }
-
-      this.drawPaused = false
 
       const audioData = new Uint8Array(this.waveform.frequencyBinCount)
       const sliceWidth = this.width / audioData.length
